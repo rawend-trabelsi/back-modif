@@ -1,6 +1,7 @@
 package com.rawend.demo.Controller;
 
 import com.rawend.demo.entity.User;
+
 import com.rawend.demo.services.UserService;
 import com.rawend.demo.Repository.UserRepository;
 import com.rawend.demo.dto.UserUpdateRequest;
@@ -10,13 +11,14 @@ import com.rawend.demo.utils.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/auth/admin")
 @RequiredArgsConstructor
@@ -78,19 +80,21 @@ public class AdminController {
 
         return ResponseEntity.ok("User updated successfully  " );
     }
-
+  
     @GetMapping("/users")
     public ResponseEntity<?> getAdminAndTechnicianUsers() {
-     
+        // Récupérer tous les utilisateurs avec les rôles ADMIN ou TECHNICIEN
         List<User> users = userRepository.findAll()
                 .stream()
                 .filter(user -> user.getRole() == Role.ADMIN || user.getRole() == Role.TECHNICIEN)
                 .collect(Collectors.toList());
 
+        // Construire une liste avec les informations nécessaires (username, email, phone, role)
         List<Map<String, Object>> response = users.stream()
                 .map(user -> {
                     Map<String, Object> userMap = new java.util.HashMap<>();
-                    userMap.put("username", user.getUsernameFieldDirectly());
+                    userMap.put("id", user.getId());
+                    userMap.put("username", user.getUsernameFieldDirectly()); // Appel explicite au vrai champ username
                     userMap.put("email", user.getEmail());
                     userMap.put("phone", user.getPhone());
                     userMap.put("role", user.getRole().toString());
@@ -100,6 +104,9 @@ public class AdminController {
 
         return ResponseEntity.ok(response);
     }
+
+
+
     @GetMapping
     public ResponseEntity<String> sayHi() {
         return ResponseEntity.ok("Hi admin");
