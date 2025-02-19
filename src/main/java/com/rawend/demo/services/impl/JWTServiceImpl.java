@@ -35,7 +35,7 @@ public class JWTServiceImpl implements JWTService {
        
         extraClaims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList())); // Liste des rôles
+                .collect(Collectors.toList())); 
 
         return Jwts.builder()
                 .setClaims(extraClaims)
@@ -47,10 +47,10 @@ public class JWTServiceImpl implements JWTService {
     }
 
     public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        // Ajouter les rôles de l'utilisateur dans les claims
+        
         extraClaims.put("roles", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList())); // Liste des rôles
+                .collect(Collectors.toList())); 
 
         return Jwts.builder()
                 .setClaims(extraClaims)

@@ -40,7 +40,10 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/auth/signin", "/api/v1/auth/signup", "/api/v1/auth/refresh", "/api/v1/auth/forgot-password","/api/v1/auth/verify-code", "/api/v1/auth/check-email","/api/v1/auth/check-phone","/api/v1/auth/reset-password","/api/v1/auth/resend-verification-code","/home","/auth/facebook","/api/v1/auth/user/update-profile","/api/v1/auth/user/profile").permitAll()
                 .requestMatchers("/api/v1/auth/admin").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/api/v1/auth/Technicien").hasAuthority(Role.TECHNICIEN.name())
-                
+                .requestMatchers("/api/promotions/**").hasAuthority(Role.ADMIN.name())
+                .requestMatchers("/api/promotions/**").hasAuthority(Role.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, "/api/promotions/apply", "/api/promotions/servicesWithPromotions").hasAnyRole("USER", "ADMIN")
+
                 .requestMatchers("/api/v1/auth/admin/**")
                 .hasAuthority(Role.ADMIN.name())
                 
